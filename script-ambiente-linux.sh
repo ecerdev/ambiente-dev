@@ -51,6 +51,12 @@ sudo update-alternatives --list java
 
 sudo update-alternatives --list javac
 
+#Atualizando o Linux
+sudo apt update
+
+#Realizando upgrade dos pacotes
+sudo apt upgrade -y
+
 #---------------------------------
 #=========Instalando o NVM=========
 #---------------------------------
@@ -66,6 +72,15 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 
 #Aplicando o export e atualizando a source
 source ~/.bashrc
+
+#Atualizando o Linux
+sudo apt update
+
+#Realizando upgrade dos pacotes
+sudo apt upgrade -y
+
+#Aplicando fix de pacotes
+sudo apt --fix-broken install -y
 
 #-------------------------------------------
 #=========Instalando o NODE com NPM=========
@@ -111,16 +126,18 @@ sudo echo -e 'export PATH="$PATH:/home/estudos/jpm/bin"' >  ~/.bashrc
 #Aplicando e atualizando
 . ~/.bashrc
 
+#Atualizando o Linux
+sudo apt update
+
+#Realizando upgrade dos pacotes
+sudo apt upgrade -y
+
+#Aplicando fix de pacotes
+sudo apt --fix-broken install -y
 
 #--------------------------------------------
 #=========Instalando o Google Chrome=========
 #--------------------------------------------
-sudo apt update
-
-sudo apt --fix-broken install
-
-sudo apt upgrade
-
 #Acessando Diretório Raiz
 cd ~
 
@@ -133,11 +150,14 @@ sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.
 #Instalando o Chrome
 sudo dpkg -i google-chrome-stable_current_amd64.deb
 
+#Atualizando o Linux
 sudo apt update
 
-sudo apt --fix-broken install
+#Realizando upgrade dos pacotes
+sudo apt upgrade -y
 
-sudo apt upgrade
+#Aplicando fix de pacotes
+sudo apt --fix-broken install -y
 
 #--------------------------------------
 #=========Instalando o Discord=========
@@ -169,6 +189,15 @@ sudo wget https://az764295.vo.msecnd.net/stable/e7e037083ff4455cf320e344325dacb4
 #Instalando o Visual Studio Code
 sudo dpkg -i code_1.83.0-1696350811_amd64.deb
 
+#Atualizando o Linux
+sudo apt update
+
+#Realizando upgrade dos pacotes
+sudo apt upgrade -y
+
+#Aplicando fix de pacotes
+sudo apt --fix-broken install -y
+
 #--------------------------------------
 #=========Instalando o DBeaver=========
 #--------------------------------------
@@ -183,3 +212,12 @@ sudo wget https://download.dbeaver.com/community/23.2.2/dbeaver-ce_23.2.2_amd64.
 
 #Instalando o DBeaver
 sudo dpkg -i dbeaver-ce_23.2.2_amd64.deb
+
+#Atualizando o Linux
+sudo apt update
+
+#Realizando upgrade dos pacotes
+sudo apt upgrade -y
+
+#Aplicando fix de pacotes
+sudo apt --fix-broken install -y
