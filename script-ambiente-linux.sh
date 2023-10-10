@@ -21,6 +21,9 @@ sudo chown -R $USER jdk-8u291-linux-x64.tar.gz
 #Criando pasta jvm
 sudo mkdir /usr/lib/jvm
 
+#Acessando a pasta criada
+cd /usr/lib/jvm
+
 #Extraindo Java
 sudo tar -xzvf ~/Downloads/jdk-8u291-linux-x64.tar.gz
 
@@ -112,6 +115,12 @@ sudo echo -e 'export PATH="$PATH:/home/estudos/jpm/bin"' >  ~/.bashrc
 #--------------------------------------------
 #=========Instalando o Google Chrome=========
 #--------------------------------------------
+sudo apt update
+
+sudo apt --fix-broken install
+
+sudo apt upgrade
+
 #Acessando Diretório Raiz
 cd ~
 
@@ -123,6 +132,12 @@ sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.
 
 #Instalando o Chrome
 sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+sudo apt update
+
+sudo apt --fix-broken install
+
+sudo apt upgrade
 
 #--------------------------------------
 #=========Instalando o Discord=========
