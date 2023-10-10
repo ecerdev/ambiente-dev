@@ -15,11 +15,17 @@ cd /home/$USER/Downloads
 #Baixando o JDK 8u 291 x65
 sudo wget https://www.erickcerqueira.com.br/downloads/jdk-8u291-linux-x64.tar.gz
 
+#Adicionando Permissões no arquivo baixado
+sudo chown -R $USER jdk-8u291-linux-x64.tar.gz
+
 #Criando pasta jvm
 sudo mkdir /usr/lib/jvm
 
 #Extraindo Java
 sudo tar -xzvf ~/Downloads/jdk-8u291-linux-x64.tar.gz
+
+#Adicionando Permissões no arquivo extraido
+sudo chown -R $USER jdk1.8.0_291
 
 #Acessando a pasta extraida do java
 cd jdk1.8.0_291
