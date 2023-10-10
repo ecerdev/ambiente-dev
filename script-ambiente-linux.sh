@@ -31,9 +31,9 @@ sudo chown -R $USER jdk1.8.0_291
 cd jdk1.8.0_291
 
 #Alterando váriavel de ambiente para receber o java
-sudo echo -e 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/jdk1.8.0_291/bin:/usr/lib/jvm/jdk1.8.0_291/jre/bin" \nJ2SDKDIR="/usr/lib/jvm/jdk1.8.0_291"
+sudo bash -c "echo -e 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/jdk1.8.0_291/bin:/usr/lib/jvm/jdk1.8.0_291/jre/bin" \nJ2SDKDIR="/usr/lib/jvm/jdk1.8.0_291"
 J2REDIR="/usr/lib/jvm/jdk1.8.0_291/jre"
-JAVA_HOME="/usr/lib/jvm/jdk1.8.0_291"' >  /etc/environment
+JAVA_HOME="/usr/lib/jvm/jdk1.8.0_291"' >  /etc/environment"
 
 #Aplicando e Atualizando as conifigurações do Java
 sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_291/bin/java" 0
