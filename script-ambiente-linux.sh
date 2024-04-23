@@ -1,226 +1,209 @@
-#Atualizando o Linux
-sudo apt update
+#!/bin/bash
 
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
+# Informações do criador do script
+criador="Erick Cerqueira"
+data_criacao="23/04/2024"
+versao="v1"
 
-#---------------------------------
-#=========Instalando Java=========
-#---------------------------------
-#Acessar Diretório de Downloads
-cd ~
+# Nome de usuário atual
+usuario=$(whoami)
 
-cd /home/$USER/Downloads
+# Lista de softwares a serem instalados
+softwares=(
+    "Java"
+    "Docker"
+    "NVM e Node.js"
+    "Postman"
+    "PortX"
+    "OpenVPN"
+    "XAMPP"
+    "Google Chrome"
+    "Discord"
+    "Visual Studio Code"
+    "DBeaver"
+    "Blade CLI"
+    "Liferay Theme Generator"
+    "Yo"
+    "Gulp"
+    "Git"
+)
 
-#Baixando o JDK 8u 291 x65
-sudo wget https://www.erickcerqueira.com.br/downloads/jdk-8u291-linux-x64.tar.gz
+# Função para exibir mensagem de progresso
+exibir_mensagem_progresso() {
+    echo "----------------------------------------------"
+    echo "Instalação de $1 em andamento..."
+    echo "Por favor, aguarde..."
+    echo "----------------------------------------------"
+}
 
-#Adicionando Permissões no arquivo baixado
-sudo chown -R $USER jdk-8u291-linux-x64.tar.gz
+# Função para listar os softwares a serem instalados
+listar_softwares() {
+    echo "Softwares a serem instalados:"
+    for software in "${softwares[@]}"; do
+        echo "- $software"
+    done
+    echo ""
+}
 
-#Criando pasta jvm
-sudo mkdir /usr/lib/jvm
+# Verificar se o Git está instalado
+verificar_git() {
+    if ! command -v git &>/dev/null; then
+        exibir_mensagem_progresso "Git"
+        sudo apt install git -y
+    fi
+}
 
-#Acessando a pasta criada
-cd /usr/lib/jvm
+# Boas-vindas
+echo "Bem-vindo à Configuração Automatizada do Ambiente Linux!"
+echo "Este script foi criado por $criador em $data_criacao, Versão: $versao."
+listar_softwares
 
-#Extraindo Java
-sudo tar -xzvf ~/Downloads/jdk-8u291-linux-x64.tar.gz
+# Solicitar confirmação do usuário
+read -p "Deseja continuar com a instalação? (s/n): " continuar
+if [[ $continuar != "s" ]]; then
+    echo "Instalação cancelada."
+    exit 0
+fi
 
-#Adicionando Permissões no arquivo extraido
-sudo chown -R $USER jdk1.8.0_291
+# Atualizar o sistema
+exibir_mensagem_progresso "Atualização do sistema"
+sudo apt update && sudo apt upgrade -y
 
-#Acessando a pasta extraida do java
-cd jdk1.8.0_291
+# Verificar e instalar wget e curl, se necessário
+exibir_mensagem_progresso "wget e curl"
+if ! command -v wget &>/dev/null; then
+    sudo apt install wget -y
+fi
 
-#Alterando váriavel de ambiente para receber o java
-sudo bash -c "echo -e 'PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/lib/jvm/jdk1.8.0_291/bin:/usr/lib/jvm/jdk1.8.0_291/jre/bin" \nJ2SDKDIR="/usr/lib/jvm/jdk1.8.0_291"
-J2REDIR="/usr/lib/jvm/jdk1.8.0_291/jre"
-JAVA_HOME="/usr/lib/jvm/jdk1.8.0_291"' >  /etc/environment"
+if ! command -v curl &>/dev/null; then
+    sudo apt install curl -y
+fi
 
-#Aplicando e Atualizando as conifigurações do Java
+# Verificar e instalar Git, se necessário
+verificar_git
+
+# Diretório de Downloads
+download_dir="/home/$usuario/Downloads"
+
+# Instalação do Java
+exibir_mensagem_progresso "Java"
+jdk_url="https://www.erickcerqueira.com.br/downloads/jdk-8u291-linux-x64.tar.gz"
+sudo mkdir -p /usr/lib/jvm
+sudo wget -O "$download_dir/jdk.tar.gz" "$jdk_url"
+sudo tar -xzvf "$download_dir/jdk.tar.gz" -C /usr/lib/jvm/
 sudo update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.8.0_291/bin/java" 0
-
 sudo update-alternatives --install "/usr/bin/javac" "javac" "/usr/lib/jvm/jdk1.8.0_291/bin/javac" 0
+echo "export JAVA_HOME=\"/usr/lib/jvm/jdk1.8.0_291\"" >> "/home/$usuario/.bashrc"
+source "/home/$usuario/.bashrc"
 
-sudo update-alternatives --set java /usr/lib/jvm/jdk1.8.0_291/bin/java
-
-sudo update-alternatives --set javac /usr/lib/jvm/jdk1.8.0_291/bin/javac
-
-sudo update-alternatives --list java
-
-sudo update-alternatives --list javac
-
-#Atualizando o Linux
+# Instalação do Docker
+exibir_mensagem_progresso "Docker"
+sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt update
+sudo apt install docker-ce docker-ce-cli containerd.io -y
+sudo usermod -aG docker $usuario
 
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
-
-#---------------------------------
-#=========Instalando o NVM=========
-#---------------------------------
-#Acessar Diretório Raiz
-cd ~
-
-#Baixando o NVM
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-
-#Exportando o path
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-
-#Aplicando o export e atualizando a source
-source ~/.bashrc
-
-#Atualizando o Linux
-sudo apt update
-
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
-
-#Aplicando fix de pacotes
-sudo apt --fix-broken install -y
-
-#-------------------------------------------
-#=========Instalando o NODE com NPM=========
-#-------------------------------------------
-#Acessando Diretório Raiz
-cd ~
-
-#Instalando o NodeJS 16.20.0 para Liferay 7.4
+# Instalação do NVM e Node.js
+exibir_mensagem_progresso "NVM e Node.js"
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+export NVM_DIR="/home/$usuario/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 nvm install v16.20.0
 
-#----------------------------------------
-#=========Instalando o YO e GULP=========
-#----------------------------------------
-#Acessando Diretório Raiz
-cd ~
+# Instalação do Postman
+exibir_mensagem_progresso "Postman"
+postman_url="https://dl.pstmn.io/download/latest/linux64"
+sudo wget -O "$download_dir/postman.tar.gz" "$postman_url"
+sudo tar -xzvf "$download_dir/postman.tar.gz" -C /opt/
+sudo ln -s /opt/Postman/Postman /usr/bin/postman
 
-#Instalando o Gulp & Yo para Liferay 7.4
-npm install -g gulp
+# Instalação do PortX
+exibir_mensagem_progresso "PortX"
+portx_url="https://github.com/kubesphere/portx/releases/download/v0.5.0/portx-v0.5.0-linux-amd64.tar.gz"
+sudo wget -O "$download_dir/portx.tar.gz" "$portx_url"
+sudo tar -xzvf "$download_dir/portx.tar.gz" -C /usr/local/bin/
 
-#----------------------------------------------------
-#=========Instalando Liferay Theme Generator=========
-#----------------------------------------------------
-#Acessando Diretório Raiz
-cd ~
+# Instalação do OpenVPN
+exibir_mensagem_progresso "OpenVPN"
+sudo apt install openvpn -y
 
-#Instalando o Liferay Generator para Liferay 7.4
-npm install -g generator-liferay-theme@10.x.x
+# Instalação do XAMPP
+exibir_mensagem_progresso "XAMPP"
+xampp_url="https://www.apachefriends.org/xampp-files/8.1.0/xampp-linux-x64-8.1.0-0-installer.run"
+sudo wget -O "$download_dir/xampp-installer.run" "$xampp_url"
+sudo chmod +x "$download_dir/xampp-installer.run"
+sudo "$download_dir/xampp-installer.run"
 
-#--------------------------------------
-#=========Instalando Blade CLI=========
-#--------------------------------------
-#Acessando Diretório Raiz
-cd ~
+# Criar atalho na área de trabalho para o gerenciador do XAMPP
+cat <<EOF > "/home/$usuario/Área de Trabalho/XAMPP Manager.desktop"
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=XAMPP Manager
+Comment=Start, Stop, Restart XAMPP Services
+Exec=gksudo /opt/lampp/manager-linux-x64.run
+Icon=/opt/lampp/htdocs/favicon.ico
+Terminal=false
+Categories=Development;WebDevelopment;
+EOF
 
-#Instalando o Blade CLI
+# Permissões de execução para o atalho
+chmod +x "/home/$usuario/Área de Trabalho/XAMPP Manager.desktop"
+
+# Instalação do Blade CLI
+exibir_mensagem_progresso "Blade CLI"
 curl -L https://raw.githubusercontent.com/liferay/liferay-blade-cli/master/cli/installers/local | sh
 
-#Exportando a váriavel do blade
-#Obs: Altere o usuário para o seu "ecerqueira"
-sudo echo -e 'export PATH="$PATH:/home/estudos/jpm/bin"' >  ~/.bashrc
+# Exportar variável do Blade CLI
+echo "export PATH=\"\$PATH:/home/$usuario/jpm/bin\"" >> "/home/$usuario/.bashrc"
+source "/home/$usuario/.bashrc"
 
-#Aplicando e atualizando
-. ~/.bashrc
+# Instalação do Liferay Theme Generator
+exibir_mensagem_progresso "Liferay Theme Generator"
+npm install -g generator-liferay-theme@10.x.x
 
-#Atualizando o Linux
-sudo apt update
+# Instalação do Yo e Gulp
+exibir_mensagem_progresso "Yo e Gulp"
+npm install -g yo gulp
 
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
+# Instalação de outras ferramentas e aplicativos (se houver)
 
-#Aplicando fix de pacotes
-sudo apt --fix-broken install -y
+# Instalação do Google Chrome
+exibir_mensagem_progresso "Google Chrome"
+chrome_url="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+sudo wget -O "$download_dir/google-chrome.deb" "$chrome_url"
+sudo dpkg -i "$download_dir/google-chrome.deb"
+sudo apt install -f -y
 
-#--------------------------------------------
-#=========Instalando o Google Chrome=========
-#--------------------------------------------
-#Acessando Diretório Raiz
-cd ~
+# Instalação do Discord
+exibir_mensagem_progresso "Discord"
+discord_url="https://dl.discordapp.net/apps/linux/0.0.31/discord-0.0.31.deb"
+sudo wget -O "$download_dir/discord.deb" "$discord_url"
+sudo dpkg -i "$download_dir/discord.deb"
+sudo apt install -f -y
 
-#Acessar Diretório de Downloads
-cd /home/$USER/Downloads
+# Instalação do Visual Studio Code
+exibir_mensagem_progresso "Visual Studio Code"
+vscode_url="https://az764295.vo.msecnd.net/stable/e7e037083ff4455cf320e344325dacb480062c3c/code_1.83.0-1696350811_amd64.deb"
+sudo wget -O "$download_dir/vscode.deb" "$vscode_url"
+sudo dpkg -i "$download_dir/vscode.deb"
+sudo apt install -f -y
 
-#Baixando a ultima versão do chrome estável
-sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+# Instalação do DBeaver
+exibir_mensagem_progresso "DBeaver"
+dbeaver_url="https://download.dbeaver.com/community/23.2.2/dbeaver-ce_23.2.2_amd64.deb"
+sudo wget -O "$download_dir/dbeaver.deb" "$dbeaver_url"
+sudo dpkg -i "$download_dir/dbeaver.deb"
+sudo apt install -f -y
 
-#Instalando o Chrome
-sudo dpkg -i google-chrome-stable_current_amd64.deb
+# Limpeza
+echo "----------------------------------------------"
+echo "Limpando arquivos de instalação..."
+echo "----------------------------------------------"
+rm -rf "$download_dir/*.deb" "$download_dir/jdk.tar.gz" "$download_dir/postman.tar.gz" "$download_dir/portx.tar.gz" "$download_dir/xampp-installer.run"
 
-#Atualizando o Linux
-sudo apt update
-
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
-
-#Aplicando fix de pacotes
-sudo apt --fix-broken install -y
-
-#--------------------------------------
-#=========Instalando o Discord=========
-#--------------------------------------
-#Acessando Diretório Raiz
-cd ~
-
-#Acessar Diretório de Downloads
-cd /home/$USER/Downloads
-
-#Baixando a ultima versão do discord estável
-sudo wget https://dl.discordapp.net/apps/linux/0.0.31/discord-0.0.31.deb
-
-#Instalando o Discord
-sudo dpkg -i discord-0.0.31.deb
-
-#-------------------------------------------------
-#=========Instalando o Visual Studio Code=========
-#-------------------------------------------------
-#Acessando Diretório Raiz
-cd ~
-
-#Acessar Diretório de Downloads
-cd /home/$USER/Downloads
-
-#Baixando a ultima versão do Visual Studio Code estável
-sudo wget https://az764295.vo.msecnd.net/stable/e7e037083ff4455cf320e344325dacb480062c3c/code_1.83.0-1696350811_amd64.deb
-
-#Instalando o Visual Studio Code
-sudo dpkg -i code_1.83.0-1696350811_amd64.deb
-
-#Atualizando o Linux
-sudo apt update
-
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
-
-#Aplicando fix de pacotes
-sudo apt --fix-broken install -y
-
-#--------------------------------------
-#=========Instalando o DBeaver=========
-#--------------------------------------
-#Acessando Diretório Raiz
-cd ~
-
-#Acessar Diretório de Downloads
-cd /home/$USER/Downloads
-
-#Baixando a ultima versão do DBeaver estável
-sudo wget https://download.dbeaver.com/community/23.2.2/dbeaver-ce_23.2.2_amd64.deb
-
-
-#Instalando o DBeaver
-sudo dpkg -i dbeaver-ce_23.2.2_amd64.deb
-
-#Atualizando o Linux
-sudo apt update
-
-#Realizando upgrade dos pacotes
-sudo apt upgrade -y
-
-#Aplicando fix de pacotes
-sudo apt --fix-broken install -y
-
-#Limpando a pasta downloads
-sudo rm -rf *
+echo ""
+echo "Configuração automatizada concluída com sucesso!"
+echo "Seu ambiente Linux está pronto para uso."
