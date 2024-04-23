@@ -15,12 +15,12 @@ Este script shell foi desenvolvido para automatizar a configuração do ambiente
 
 3. Dê permissões de execução ao script:
    ```bash
-   chmod +x ambiente-linux-script.sh
+   chmod +x script-ambiente-linux.sh
    ```
 
 4. Execute o script com permissões de superusuário:
     ```bash
-    sudo ./ambiente-linux-script.sh
+    sudo ./script-ambiente-linux.sh
     ````
 
 5. Siga as instruções simples fornecidas pelo script.
